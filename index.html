@@ -6,13 +6,15 @@
   
   <!-- Open Graph Meta Tags for Social Media & WhatsApp Previews -->
   <meta property="og:title" content="Praise Rally - Third Edition">
-  <meta property="og:description" content="Join Martyrs Church Nateete Youth Ministry for Praise Rally 3rd Edition on Oct 25, 2026!">
+  <meta property="og:description" content="Join Martyrs Church Nateete Youth Ministry for Praise Rally 3rd Edition on Oct 25, 2026 at Mackay Memorial Primary School!">
   <meta property="og:image" content="flyer.jpg">
 
   <title>Praise Rally - Third Edition</title>
   
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Canvas Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   
   <style>
     * {
@@ -136,6 +138,29 @@
       margin-bottom: 22px;
     }
 
+    /* Interactive RSVP Form */
+    .rsvp-box {
+      background: #fff8f0;
+      border: 2px dashed #f39c12;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+    .rsvp-box h3 {
+      font-size: 1.05rem;
+      color: #d35400;
+      margin-bottom: 12px;
+    }
+    .input-field {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+
     /* Action Buttons */
     .btn {
       display: flex;
@@ -151,6 +176,8 @@
       font-size: 0.95rem;
       transition: all 0.25s ease;
       box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      border: none;
+      cursor: pointer;
     }
     .btn:hover {
       transform: translateY(-2px);
@@ -166,6 +193,10 @@
     }
     .btn-maps {
       background-color: #ea4335;
+      color: #ffffff;
+    }
+    .btn-share {
+      background-color: #8e44ad;
       color: #ffffff;
     }
     .contact {
@@ -207,21 +238,31 @@
     <div class="details">
       📅 <strong>Date:</strong> Sunday, 25th October 2026<br>
       ⏰ <strong>Time:</strong> 2:00 PM EAT<br>
-      📍 <strong>Venue:</strong> Martyrs Church Nateete
+      📍 <strong>Venue:</strong> Mackay Memorial Primary School
     </div>
 
-    <!-- ACTION BUTTONS -->
-    <a class="btn btn-whatsapp" href="https://wa.me/256784474159?text=Hello!%20I%20would%20like%20to%20attend%20the%20Praise%20Rally.">
-      📲 RSVP via WhatsApp
-    </a>
+    <!-- INTERACTIVE RSVP FORM -->
+    <div class="rsvp-box">
+      <h3>🎉 Confirm Your Attendance</h3>
+      <input type="text" id="guestName" class="input-field" placeholder="Enter Your Full Name" required>
+      <input type="number" id="guestCount" class="input-field" placeholder="How many people are you coming with?" min="1" value="1">
+      <button class="btn btn-whatsapp" onclick="sendCustomRSVP()">
+        📲 Send RSVP via WhatsApp
+      </button>
+    </div>
 
-    <a class="btn btn-calendar" href="https://www.google.com/calendar/render?action=TEMPLATE&text=Praise+Rally+-+Third+Edition&dates=20261025T110000Z/20261025T150000Z&details=Theme:+The+Cornerstone+(Ephesians+2:20)&location=Martyrs+Church+Nateete">
+    <!-- OTHER BUTTONS -->
+    <a class="btn btn-calendar" onclick="triggerConfetti()" href="https://www.google.com/calendar/render?action=TEMPLATE&text=Praise+Rally+-+Third+Edition&dates=20261025T110000Z/20261025T150000Z&details=Theme:+The+Cornerstone+(Ephesians+2:20)&location=Mackay+Memorial+Primary+School">
       📅 Add to Google Calendar
     </a>
 
-    <a class="btn btn-maps" href="https://www.google.com/maps/search/?api=1&query=Martyrs+Church+Nateete" target="_blank">
+    <a class="btn btn-maps" href="https://www.google.com/maps/search/?api=1&query=Mackay+Memorial+Primary+School+Nateete" target="_blank">
       📍 Directions on Google Maps
     </a>
+
+    <button class="btn btn-share" onclick="copyEventLink()">
+      🔗 Copy & Share Event Link
+    </button>
 
     <div class="contact">
       📞 <strong>Inquiries:</strong> +256 784 474159 | +256 760 193020
@@ -229,10 +270,10 @@
 
   </div>
 
-  <!-- COUNTDOWN SCRIPT -->
+  <!-- SCRIPTS -->
   <script>
+    // Countdown Timer Script
     const eventDate = new Date("October 25, 2026 14:00:00").getTime();
-
     const timer = setInterval(function() {
       const now = new Date().getTime();
       const distance = eventDate - now;
@@ -248,6 +289,43 @@
       document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000);
     }, 1000);
+
+    // Confetti Effect Function
+    function triggerConfetti() {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    }
+
+    // Custom RSVP Handler
+    function sendCustomRSVP() {
+      const name = document.getElementById('guestName').value.trim();
+      const count = document.getElementById('guestCount').value;
+
+      if (!name) {
+        alert("Please enter your name first!");
+        return;
+      }
+
+      triggerConfetti();
+
+      const message = `Praise God! My name is ${encodeURIComponent(name)}. I will be attending Praise Rally 3rd Edition with ${encodeURIComponent(count)} person(s)!`;
+      const whatsappURL = `https://wa.me/256784474159?text=${message}`;
+
+      setTimeout(() => {
+        window.open(whatsappURL, '_blank');
+      }, 500);
+    }
+
+    // Copy Event Link Handler
+    function copyEventLink() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        triggerConfetti();
+        alert("Event link copied to clipboard! You can now paste and send it to your friends.");
+      });
+    }
   </script>
 
 </body>
